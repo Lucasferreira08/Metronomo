@@ -10,14 +10,14 @@ void joystick_init() {
 }
 
 int read_bpm() {
-    adc_select_input(0);
-    uint16_t adc_value = adc_read()-2047;
+    adc_select_input(1);
+    uint16_t adc_value = adc_read();
     printf("%d\n", adc_value);
-    if (adc_value>150) 
+    if (adc_value>(2047+500)) 
     {
         return 1;
     }
-    else if (adc_value<-150)
+    else if (adc_value<(2047-500))
     {
         return -1;
     }
