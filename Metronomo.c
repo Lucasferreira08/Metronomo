@@ -37,7 +37,7 @@ int64_t buzzer_stop_alarm_callback(alarm_id_t id, void *user_data) {
 }
 
 int64_t metronome_alarm_callback(alarm_id_t id, void *user_data) {
-    int frequency = (current_beat == 0) ? 880 : 440;
+    int frequency = (current_beat == 0) ? 880 : 440;  // 880 : 440
     buzzer_start_tone(frequency);
     add_alarm_in_ms(50, buzzer_stop_alarm_callback, NULL, false);
     
