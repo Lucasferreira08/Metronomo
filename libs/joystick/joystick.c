@@ -11,8 +11,18 @@ void joystick_init() {
 
 int read_bpm() {
     adc_select_input(0);
-    uint16_t adc_value = adc_read();
-    return (adc_value * 210 / 4095) + 30;
+    uint16_t adc_value = adc_read()-2047;
+    printf("%d\n", adc_value);
+    if (adc_value>150) 
+    {
+        return 1;
+    }
+    else if (adc_value<-150)
+    {
+        return -1;
+    }
+    return 0;
+    // return (adc_value * 210 / 4095) + 30;
 }
 
 bool is_button_pressed() {

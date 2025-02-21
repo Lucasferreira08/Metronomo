@@ -25,13 +25,9 @@ volatile bool update_display = true;
 
 void update_display_func() {
     ssd1306_fill(&ssd, false);
-    // oled_draw_text(0, 0, "BPM: %d", state->bpm);
     draw_bpm(&ssd, "BPM %d", current_bpm, 0, 0);
-    // oled_draw_text(0, 16, "Time: %d/%d", state->pattern[0], state->pattern[1]);
     draw_time(&ssd, "Time %d %d", current_time_signature.numerator, current_time_signature.denominator, 0, 16);
-    // oled_draw_text(0, 32, state->recording ? "REC" : "PLAY");
-    ssd1306_draw_string(&ssd, "PLAY", 0, 32);
-    // oled_show();
+    // ssd1306_draw_string(&ssd, "PLAY", 0, 32);
     ssd1306_send_data(&ssd);
 }
 
@@ -65,9 +61,20 @@ int main() {
 
     bool button_debounce = false;
     while (1) {
-        int new_bpm = read_bpm();
-        if (new_bpm != current_bpm) {
-            current_bpm = new_bpm;
+        int add_bpm = read_bpm();
+        if (add_bpm) {
+            if (current_bpm>=240 && add_bpm>0)
+            {
+                current_bpm=30;
+                add_bpm--;
+            }
+            else if (current_bpm<=30 && add_bpm<0) 
+            {
+                current_bpm=240;
+                add_bpm++;
+            }
+            
+            current_bpm += add_bpm;
             update_display = true;
         }
 
@@ -94,6 +101,6 @@ int main() {
         }
         
         update_display = true;
-        sleep_ms(50);
+        sleep_ms(100);
     }
 }
