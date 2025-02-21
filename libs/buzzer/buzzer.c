@@ -3,9 +3,19 @@
 static uint pwm_slice_num;
 
 void buzzer_init() {
+    // gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);
+    // pwm_slice_num = pwm_gpio_to_slice_num(BUZZER_PIN);
+    // pwm_config config = pwm_get_default_config();
+    // pwm_init(pwm_slice_num, &config, true);
+    // pwm_set_enabled(pwm_slice_num, false);
+
     gpio_set_function(BUZZER_PIN, GPIO_FUNC_PWM);
     pwm_slice_num = pwm_gpio_to_slice_num(BUZZER_PIN);
+    
     pwm_config config = pwm_get_default_config();
+    pwm_config_set_clkdiv(&config, 125.f); // Divisor de clock mais simples
+    pwm_config_set_wrap(&config, 1000);     // Valor de wrap fixo
+    
     pwm_init(pwm_slice_num, &config, true);
     pwm_set_enabled(pwm_slice_num, false);
 }
@@ -15,10 +25,15 @@ void buzzer_start_tone(int frequency) {
         pwm_set_enabled(pwm_slice_num, false);
         return;
     }
-    uint32_t sys_clk = 125000000;
-    uint32_t div = sys_clk / (frequency * 512);
-    pwm_set_clkdiv_mode(pwm_slice_num, div);
-    uint32_t wrap = (sys_clk / (div * frequency)) - 1;
+    // uint32_t sys_clk = 125000000;
+    // uint32_t div = sys_clk / (frequency * 512);
+    // pwm_set_clkdiv_mode(pwm_slice_num, div);
+    // uint32_t wrap = (sys_clk / (div * frequency)) - 1;
+    // pwm_set_wrap(pwm_slice_num, wrap);
+    // pwm_set_chan_level(pwm_slice_num, PWM_CHAN_B, wrap / 2);
+    // pwm_set_enabled(pwm_slice_num, true);
+
+    uint32_t wrap = (125000000 / frequency) - 1;
     pwm_set_wrap(pwm_slice_num, wrap);
     pwm_set_chan_level(pwm_slice_num, PWM_CHAN_B, wrap / 2);
     pwm_set_enabled(pwm_slice_num, true);
