@@ -68,4 +68,3 @@ target_link_libraries(Metronomo
         )
 
 pico_add_extra_outputs(Metronomo)
-

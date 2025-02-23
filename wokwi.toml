@@ -1,4 +1,0 @@
-[wokwi]
-version = 1
-firmware = 'build/Metronomo.uf2'
-elf = 'build/Metronomo.elf'

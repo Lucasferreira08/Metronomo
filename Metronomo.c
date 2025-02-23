@@ -5,7 +5,6 @@
 #include "joystick.h"
 #include "buzzer.h"
 #include "config.h"
-// #include "rhythm.h"
 
 ssd1306_t ssd; // Inicializa a estrutura do display
 
@@ -14,8 +13,8 @@ typedef struct {
     uint8_t denominator;
 } TimeSignature;
 
-TimeSignature time_signatures[] = {{4, 4}, {3, 4}};
-const uint8_t NUM_TIME_SIGNATURES = 2;
+TimeSignature time_signatures[] = {{1, 4}, {2, 4}, {3, 4}, {4, 4}};
+const uint8_t NUM_TIME_SIGNATURES = 4;
 volatile uint8_t current_time_sig_index = 0;
 volatile TimeSignature current_time_signature;
 
@@ -25,9 +24,8 @@ volatile bool update_display = true;
 
 void update_display_func() {
     ssd1306_fill(&ssd, false);
-    draw_bpm(&ssd, "BPM %d", current_bpm, 0, 0);
-    draw_time(&ssd, "Time %d %d", current_time_signature.numerator, current_time_signature.denominator, 0, 16);
-    // ssd1306_draw_string(&ssd, "PLAY", 0, 32);
+    draw_bpm(&ssd, "BPM: %d", current_bpm, 0, 0);
+    draw_time(&ssd, "Time: %d/%d", current_time_signature.numerator, current_time_signature.denominator, 0, 16);
     ssd1306_send_data(&ssd);
 }
 
@@ -90,14 +88,7 @@ int main() {
         }
 
         if (update_display) {
-            // ssd1306_fill(&ssd, false);
-            // draw_bpm(&ssd, "BPM: ", current_bpm, 0, 0);
-            // char time_sig_str[16];
-            // sprintf(time_sig_str, "%d/%d", current_time_signature.numerator, current_time_signature.denominator);
-            // ssd1306_draw_string(&ssd, time_sig_str, 0, 16);
-            // ssd1306_send_data(&ssd);
             update_display_func(current_time_signature);
-            // update_display = false;
         }
         
         update_display = true;
